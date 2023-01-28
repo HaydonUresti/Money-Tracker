@@ -4,12 +4,34 @@ using namespace std;
 class Account
 {
 public:
-    string account_name = "Account";
+    string accountName;
+    int ballance;
+
+    Account(string name, int currentBallance)
+    {
+        accountName = name;
+        ballance = currentBallance;
+    }
+
+    void displayInfo()
+    {
+        cout << "Account Name: " << accountName << endl;
+        cout << "Balance: " << accountName << endl;
+    }
 };
+
+void creatNewAccount(string name, int balance)
+{
+    Account name
+}
 
 int main()
 {
-    cout << "Hi! Welcome to money tracker" << endl;
+
+    Account Account1("Main Account", 100);
+
+    cout
+        << "Hi! Welcome to money tracker" << endl;
 
     bool run = true;
     int user_choice = 0;
@@ -19,7 +41,7 @@ int main()
         cout << "Please pick an option from those bellow: \n"
              << endl;
         cout << "Create a new account: 1 " << endl;
-        cout << "Add to or take from a current account: 2 " << endl;
+        cout << "View a current account: 2 " << endl;
         cout << "Delete an account: 3 " << endl;
         cout << "Exit the program: 4 " << endl;
 
@@ -28,19 +50,24 @@ int main()
 
         if (user_choice == 1)
         {
-            cout << "Choice is 1";
+            cout << "Choice is 1\n"
+                 << endl;
+            ;
         }
         else if (user_choice == 2)
         {
-            cout << "Choice is 2";
+            cout << "Choice is 2\n"
+                 << endl;
+            Account1.displayInfo();
         }
         else if (user_choice == 3)
         {
-            cout << "Choice is 3";
+            cout << "Choice is 3\n"
+                 << endl;
         }
         else if (user_choice == 4)
         {
-            cout << "Thank you for useing Money Tracker!";
+            cout << "Thank you for using Money Tracker!";
             run = false;
         }
         else
