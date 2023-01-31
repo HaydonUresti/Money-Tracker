@@ -1,5 +1,16 @@
 #include <iostream>
 using namespace std;
+#include <sys/stat.h>
+#include <direct.h>
+#include <fstream>
+
+// -----------------------IMPORTANT!!!-----------------------
+// In the line below, enter the path to the directory where money_tracker.exe is stored
+const char *pathToProgram = "C:/Users/hdure/OneDrive/Documents/School/Winter_2023/Applied_Programming/Sprint2/Money-Tracker";
+// Enter the same path below that you entered above, but add /accountDir to the end
+const char *pathToAccountDir = "C:/Users/hdure/OneDrive/Documents/School/Winter_2023/Applied_Programming/Sprint2/Money-Tracker/accountDir";
+
+// For the class aspect, have the abject be the file the user chooses
 
 class Account
 {
@@ -20,13 +31,57 @@ public:
     }
 };
 
-void creatNewAccount(string name, int balance)
+// A function that creates the directory accountsDir if it does not exist
+// Parameters: None
+// Returns: None
+void createMainFolder()
 {
-    Account name
+    struct stat sb;
+
+    if (stat(pathToAccountDir, &sb) == 0)
+        return;
+    else
+        mkdir(pathToAccountDir);
+    cout
+        << "The directory is created";
+}
+
+// Creates a new a new txt file representing an account for a user
+// Parameters: nameOfAccount: The name of the account to be created
+//             balanceOfAccount: The starting ballance of the account
+// Returns: None
+// void creatNewAccount(string nameOfAccount, char balanceOfAccount)
+// {
+//     ofstream newFile(nameOfAccount + ".txt");
+//     newFile << nameOfAccount + "\n\n" + balanceOfAccount;
+
+//         newFile.close();
+// }
+
+void creatNewAccount()
+{
+
+    string accountName;
+    string accountBallance;
+    string path(pathToAccountDir);
+
+    cout << "What would you like to name your new account? (do not enter any file extensions): \n"
+         << endl;
+    cin >> accountName;
+    cout << "What is the begining balance of your new account? (do not enter a $): \n"
+         << endl;
+    cin >> accountBallance;
+
+    // Add to the file then close it
+    ofstream newFile("./accountDir/" + accountName + ".txt");
+    newFile << accountName + "\n\n";
+    newFile << accountBallance;
+    newFile.close();
 }
 
 int main()
 {
+    createMainFolder();
 
     Account Account1("Main Account", 100);
 
@@ -50,9 +105,10 @@ int main()
 
         if (user_choice == 1)
         {
+
             cout << "Choice is 1\n"
                  << endl;
-            ;
+            creatNewAccount();
         }
         else if (user_choice == 2)
         {
