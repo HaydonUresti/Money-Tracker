@@ -3,6 +3,9 @@ using namespace std;
 #include <sys/stat.h>
 #include <direct.h>
 #include <fstream>
+#include <stdio.h>
+#include <windows.h>
+#include <tchar.h>
 
 // -----------------------IMPORTANT!!!-----------------------
 // In the line below, enter the path to the directory where money_tracker.exe is stored
@@ -10,6 +13,9 @@ const char *pathToProgram = "C:/Users/hdure/OneDrive/Documents/School/Winter_202
 // Enter the same path below that you entered above, but add /accountDir to the end
 const char *pathToAccountDir = "C:/Users/hdure/OneDrive/Documents/School/Winter_2023/Applied_Programming/Sprint2/Money-Tracker/accountDir";
 
+// TCHAR MSpathToAccount = "C:/Users/hdure/OneDrive/Documents/School/Winter_2023/Applied_Programming/Sprint2/Money-Tracker/accountDir";
+
+// const string pathToAccountDir = "C:/Users/hdure/OneDrive/Documents/School/Winter_2023/Applied_Programming/Sprint2/Money-Tracker/accountDir";
 // For the class aspect, have the abject be the file the user chooses
 
 class Account
@@ -58,12 +64,34 @@ void createMainFolder()
 //         newFile.close();
 // }
 
+void deleteAccount()
+{
+    string dirName = "./accountDir/";
+    char accountName[20];
+    int status;
+    cout << "Which account would you like to delete? (MAKE SURE to add .txt to the end of the file name)\n"
+         << endl;
+    cin >> accountName;
+
+    // Change the current working directory to the one containing all the account files
+    _chdir(pathToAccountDir);
+
+    // Delete the chosen account
+    if (remove(accountName))
+    {
+        cout << "Please try again with a valid account.";
+    }
+
+    // Change the working directory back to the previous directory
+    _chdir(pathToProgram);
+}
+
 void creatNewAccount()
 {
 
     string accountName;
     string accountBallance;
-    string path(pathToAccountDir);
+    // string path(pathToAccountDir);
 
     cout << "What would you like to name your new account? (do not enter any file extensions): \n"
          << endl;
@@ -108,6 +136,7 @@ int main()
 
             cout << "Choice is 1\n"
                  << endl;
+
             creatNewAccount();
         }
         else if (user_choice == 2)
@@ -120,6 +149,7 @@ int main()
         {
             cout << "Choice is 3\n"
                  << endl;
+            deleteAccount();
         }
         else if (user_choice == 4)
         {
