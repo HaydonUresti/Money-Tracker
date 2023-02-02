@@ -9,6 +9,8 @@ using namespace std;
 #include <map>
 #include <sstream>
 #include <iomanip>
+#include <vector>
+using std::vector;
 
 // -----------------------IMPORTANT!!!-----------------------
 // In the line below, enter the path to the directory where money_tracker.exe is stored
@@ -21,24 +23,24 @@ const char *pathToAccountDir = "C:/Users/hdure/OneDrive/Documents/School/Winter_
 // const string pathToAccountDir = "C:/Users/hdure/OneDrive/Documents/School/Winter_2023/Applied_Programming/Sprint2/Money-Tracker/accountDir";
 // For the class aspect, have the abject be the file the user chooses
 
-class Account
-{
-public:
-    string accountName;
-    int ballance;
+// class Account
+// {
+// public:
+//     string accountName;
+//     int ballance;
 
-    Account(string name, int currentBallance)
-    {
-        accountName = name;
-        ballance = currentBallance;
-    }
+//     Account(string name, int currentBallance)
+//     {
+//         accountName = name;
+//         ballance = currentBallance;
+//     }
 
-    void displayInfo()
-    {
-        cout << "Account Name: " << accountName << endl;
-        cout << "Balance: " << accountName << endl;
-    }
-};
+//     void displayInfo()
+//     {
+//         cout << "Account Name: " << accountName << endl;
+//         cout << "Balance: " << accountName << endl;
+//     }
+// };
 
 // A function that creates the directory accountsDir if it does not exist
 // Parameters: None
@@ -77,6 +79,40 @@ void deleteAccount()
     _chdir(pathToProgram);
 }
 
+// A function that reads from a selected file
+//
+string readBalance(char *accountName)
+{
+    // readFromFile(accountName);
+    _chdir(pathToAccountDir);
+    std::ifstream file(accountName);
+
+    if (file.is_open())
+    {
+        std::string line;
+
+        string curBalance;
+
+        int counter = 1;
+
+        while (std::getline(file, line))
+        {
+            counter += 1;
+
+            auto npos = line.find(":");
+            curBalance = line.substr(npos + 1);
+
+            if (counter == 4)
+            {
+                return curBalance;
+            }
+        }
+
+        file.close();
+    }
+    _chdir(pathToProgram);
+}
+
 // Creates a new a new txt file representing an account for a user
 // Parameters: nameOfAccount: The name of the account to be created
 //             balanceOfAccount: The starting ballance of the account
@@ -102,42 +138,9 @@ void creatNewAccount()
     newFile.close();
 }
 
-// A function that reads from a selected file
-void readFromFile(string filePath)
-{
-
-    cout << filePath;
-    map<string, string> configuration;
-    ifstream fin(filePath);
-    string line;
-
-    // Change the current working directory to the one containing all the account files
-    _chdir(pathToAccountDir);
-
-    while (getline(fin, line))
-    {
-        cout << "Loop is working \n"
-             << endl;
-        string key;
-        string value;
-        stringstream ss(line);
-        getline(ss, key, ':');
-        ss >> ws;
-
-        configuration[key] = value;
-    }
-
-    cout << "The current ballance of " << configuration["AccountName"] << "is " << configuration["Balance"] << endl;
-
-    // Change the working directory back to the previous directory
-    _chdir(pathToProgram);
-}
-
 int main()
 {
     createMainFolder();
-
-    Account Account1("Main Account", 100);
 
     cout
         << "Hi! Welcome to money tracker" << endl;
@@ -151,8 +154,10 @@ int main()
              << endl;
         cout << "Create a new account: 1 " << endl;
         cout << "View a current account: 2 " << endl;
-        cout << "Delete an account: 3 " << endl;
-        cout << "Exit the program: 4 " << endl;
+        cout << "Add to account: 3 " << endl;
+        cout << "Withdraw from account: 4 " << endl;
+        cout << "Delete an account: 5 " << endl;
+        cout << "Exit the program: 6 " << endl;
 
         cout << "------------------ " << endl;
         cin >> user_choice;
@@ -169,51 +174,35 @@ int main()
         {
             cout << "Choice is 2\n"
                  << endl;
-            char accountName[20];
+            char nameOfAccount[20];
             int status;
             cout << "Which account would you like to view? (MAKE SURE to add .txt to the end of the file name)\n"
                  << endl;
-            cin >> accountName;
+            cin >> nameOfAccount;
 
-            // readFromFile(accountName);
-            _chdir(pathToAccountDir);
-            std::ifstream file(accountName);
+            // string balanceOfAccount = readBalance(nameOfAccount);
 
-            if (file.is_open())
-            {
-                std::string line;
-
-                string curBalance;
-
-                int counter = 1;
-
-                while (std::getline(file, line))
-                {
-                    counter += 1;
-
-                    auto npos = line.find(":");
-                    curBalance = line.substr(npos + 1);
-
-                    if (counter == 4)
-                    {
-                        cout << "\n The current balance of your " << accountName << " account is $"
-                             << curBalance << "\n"
-                             << endl;
-                    }
-                }
-
-                file.close();
-            }
-            _chdir(pathToProgram);
+            cout << "\n The current balance of your " << nameOfAccount << " account is $"
+                 << readBalance(nameOfAccount) << "\n"
+                 << endl;
         }
 
         else if (user_choice == 3)
         {
+            char accountName[20];
             cout << "Choice is 3\n"
                  << endl;
-            deleteAccount();
+            cout << "Which account would you like to add to? (Please be sure to enter '.txt' to the end of the name)";
+            cin >> accountName;
         }
         else if (user_choice == 4)
+        {
+        }
+        else if (user_choice == 5)
+        {
+            deleteAccount();
+        }
+        else if (user_choice == 6)
         {
             cout << "Thank you for using Money Tracker!";
             run = false;
