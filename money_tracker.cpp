@@ -6,6 +6,9 @@ using namespace std;
 #include <stdio.h>
 #include <windows.h>
 #include <tchar.h>
+#include <map>
+#include <sstream>
+#include <iomanip>
 
 // -----------------------IMPORTANT!!!-----------------------
 // In the line below, enter the path to the directory where money_tracker.exe is stored
@@ -52,18 +55,6 @@ void createMainFolder()
         << "The directory is created";
 }
 
-// Creates a new a new txt file representing an account for a user
-// Parameters: nameOfAccount: The name of the account to be created
-//             balanceOfAccount: The starting ballance of the account
-// Returns: None
-// void creatNewAccount(string nameOfAccount, char balanceOfAccount)
-// {
-//     ofstream newFile(nameOfAccount + ".txt");
-//     newFile << nameOfAccount + "\n\n" + balanceOfAccount;
-
-//         newFile.close();
-// }
-
 void deleteAccount()
 {
     string dirName = "./accountDir/";
@@ -86,11 +77,15 @@ void deleteAccount()
     _chdir(pathToProgram);
 }
 
+// Creates a new a new txt file representing an account for a user
+// Parameters: nameOfAccount: The name of the account to be created
+//             balanceOfAccount: The starting ballance of the account
+// Returns: None
 void creatNewAccount()
 {
 
     string accountName;
-    string accountBallance;
+    string accountBalance;
     // string path(pathToAccountDir);
 
     cout << "What would you like to name your new account? (do not enter any file extensions): \n"
@@ -98,13 +93,44 @@ void creatNewAccount()
     cin >> accountName;
     cout << "What is the begining balance of your new account? (do not enter a $): \n"
          << endl;
-    cin >> accountBallance;
+    cin >> accountBalance;
 
     // Add to the file then close it
     ofstream newFile("./accountDir/" + accountName + ".txt");
-    newFile << accountName + "\n\n";
-    newFile << accountBallance;
+    newFile << "AccountName-" + accountName + "\n\n";
+    newFile << "Balance:" + accountBalance;
     newFile.close();
+}
+
+// A function that reads from a selected file
+void readFromFile(string filePath)
+{
+
+    cout << filePath;
+    map<string, string> configuration;
+    ifstream fin(filePath);
+    string line;
+
+    // Change the current working directory to the one containing all the account files
+    _chdir(pathToAccountDir);
+
+    while (getline(fin, line))
+    {
+        cout << "Loop is working \n"
+             << endl;
+        string key;
+        string value;
+        stringstream ss(line);
+        getline(ss, key, ':');
+        ss >> ws;
+
+        configuration[key] = value;
+    }
+
+    cout << "The current ballance of " << configuration["AccountName"] << "is " << configuration["Balance"] << endl;
+
+    // Change the working directory back to the previous directory
+    _chdir(pathToProgram);
 }
 
 int main()
@@ -143,8 +169,44 @@ int main()
         {
             cout << "Choice is 2\n"
                  << endl;
-            Account1.displayInfo();
+            char accountName[20];
+            int status;
+            cout << "Which account would you like to view? (MAKE SURE to add .txt to the end of the file name)\n"
+                 << endl;
+            cin >> accountName;
+
+            // readFromFile(accountName);
+            _chdir(pathToAccountDir);
+            std::ifstream file(accountName);
+
+            if (file.is_open())
+            {
+                std::string line;
+
+                string curBalance;
+
+                int counter = 1;
+
+                while (std::getline(file, line))
+                {
+                    counter += 1;
+
+                    auto npos = line.find(":");
+                    curBalance = line.substr(npos + 1);
+
+                    if (counter == 4)
+                    {
+                        cout << "\n The current balance of your " << accountName << " account is $"
+                             << curBalance << "\n"
+                             << endl;
+                    }
+                }
+
+                file.close();
+            }
+            _chdir(pathToProgram);
         }
+
         else if (user_choice == 3)
         {
             cout << "Choice is 3\n"
@@ -168,3 +230,6 @@ int main()
         system("pause>0");
     }
 }
+
+// Lets not immedietely worry about haveing account history
+// just account ballance
