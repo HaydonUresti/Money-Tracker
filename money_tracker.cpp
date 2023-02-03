@@ -56,6 +56,11 @@ void createMainFolder()
         mkdir(pathToAccountDir);
     cout
         << "The directory is created";
+
+    // change the current directory to the newly created one and create a file to store the current accounts.
+    _chdir(pathToAccountDir);
+    ofstream accountFile("accountFile.txt");
+    _chdir(pathToProgram);
 }
 
 void deleteAccount()
@@ -136,10 +141,12 @@ double getSubtractionToAccount(string readBalance, double subtrahend)
 void writeToAccount(char *account, double data)
 {
     // Delete current contents of the file
-
     ofstream curFile;
+
+    // Format the number to only have 2 decimal places
     float fixedData = ceil(data * 100.0) / 100.0;
 
+    // Write to file
     curFile.open(account, std::ofstream::out | std::ofstream::trunc);
     curFile << "Balance:";
     curFile << fixedData;
@@ -155,7 +162,8 @@ void creatNewAccount()
 
     string accountName;
     string accountBalance;
-    // string path(pathToAccountDir);
+    ofstream foutput;
+    ifstream finput;
 
     cout << "What would you like to name your new account? (do not enter any file extensions): \n"
          << endl;
@@ -169,6 +177,34 @@ void creatNewAccount()
 
     newFile << "Balance:" + accountBalance;
     newFile.close();
+
+    // Open the file in append mode so no data is deleted
+    finput.open("./accountDir/accountFile.txt");
+    foutput.open("./accountDir/accountFile.txt", ios::app);
+    foutput << accountName + ".txt"
+            << endl;
+
+    finput.close();
+    foutput.close();
+}
+
+std::vector<std::string> getAccountVector()
+{
+    string nameOfFile;
+    ifstream file;
+
+    file.open("./accountDir/accountFile.txt");
+    vector<string> availableAccounts;
+    string line;
+
+    while (!file.eof())
+    {
+        getline(file, line);
+        availableAccounts.push_back(line);
+    }
+    file.close();
+
+    return availableAccounts;
 }
 
 int main()
@@ -195,6 +231,7 @@ int main()
 
         cout << "------------------ " << endl;
         cin >> user_choice;
+        cout << "------------------ " << endl;
 
         if (user_choice == 1)
         {
@@ -206,8 +243,11 @@ int main()
         }
         else if (user_choice == 2)
         {
-            cout << "Choice is 2\n"
-                 << endl;
+            for (auto curLine : getAccountVector())
+            {
+                cout << curLine << endl;
+            }
+
             char nameOfAccount[20];
             int status;
             cout << "Which account would you like to view? (MAKE SURE to add .txt to the end of the file name)\n"
