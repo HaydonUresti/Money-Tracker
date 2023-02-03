@@ -1,3 +1,0 @@
-AccountName-Brinas
-
-Balance:100000000

@@ -1,3 +1,0 @@
-AccountName: account1
-
-Balance: 123
