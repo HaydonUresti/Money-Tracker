@@ -10,6 +10,7 @@ using namespace std;
 #include <sstream>
 #include <iomanip>
 #include <vector>
+#include <cmath>
 using std::vector;
 
 // -----------------------IMPORTANT!!!-----------------------
@@ -102,15 +103,47 @@ string readBalance(char *accountName)
             auto npos = line.find(":");
             curBalance = line.substr(npos + 1);
 
-            if (counter == 4)
-            {
-                return curBalance;
-            }
+            return curBalance;
+            // if (counter == 4)
+            // {
+            //     return curBalance;
+            // }
         }
 
         file.close();
     }
     _chdir(pathToProgram);
+}
+
+double getAdditionToAccount(string readBalance, double addend)
+{
+    double balance = stod(readBalance);
+
+    return balance + addend;
+}
+
+double getSubtractionToAccount(string readBalance, double subtrahend)
+{
+    double balance = stod(readBalance);
+
+    return balance - subtrahend;
+}
+
+// A function that writes to the chosen account.
+// Parameters: char *account: The path to the file to be written to
+//             string data: The data to be written to the account.
+// Returns: None
+void writeToAccount(char *account, double data)
+{
+    // Delete current contents of the file
+
+    ofstream curFile;
+    float fixedData = ceil(data * 100.0) / 100.0;
+
+    curFile.open(account, std::ofstream::out | std::ofstream::trunc);
+    curFile << "Balance:";
+    curFile << fixedData;
+    curFile.close();
 }
 
 // Creates a new a new txt file representing an account for a user
@@ -133,7 +166,7 @@ void creatNewAccount()
 
     // Add to the file then close it
     ofstream newFile("./accountDir/" + accountName + ".txt");
-    newFile << "AccountName-" + accountName + "\n\n";
+
     newFile << "Balance:" + accountBalance;
     newFile.close();
 }
@@ -150,6 +183,7 @@ int main()
 
     while (run != false)
     {
+        cout << "\n ------------------ " << endl;
         cout << "Please pick an option from those bellow: \n"
              << endl;
         cout << "Create a new account: 1 " << endl;
@@ -190,13 +224,36 @@ int main()
         else if (user_choice == 3)
         {
             char accountName[20];
+            double ammount;
             cout << "Choice is 3\n"
                  << endl;
-            cout << "Which account would you like to add to? (Please be sure to enter '.txt' to the end of the name)";
+            cout << "Which account would you like to take from? (Please be sure to enter '.txt' to the end of the name)\n"
+                 << endl;
             cin >> accountName;
+            cout << "There is currently $" << readBalance(accountName) << " in your " << accountName
+                 << " account. How much would you like to subtract? \n (Enter the ammount with TWO decimal points, Ex 1.00) \n"
+                 << endl;
+            cin >> ammount;
+            double addition = getAdditionToAccount(readBalance(accountName), ammount);
+
+            writeToAccount(accountName, addition);
         }
         else if (user_choice == 4)
         {
+            char accountName[20];
+            double subAmmount;
+            cout << "Choice is 3\n"
+                 << endl;
+            cout << "Which account would you like to add to? (Please be sure to enter '.txt' to the end of the name)\n"
+                 << endl;
+            cin >> accountName;
+            cout << "There is currently $" << readBalance(accountName) << " in your " << accountName
+                 << " account. How much would you like to add? \n (Enter the ammount with TWO decimal points, Ex 1.00) \n"
+                 << endl;
+            cin >> subAmmount;
+            double addition = getSubtractionToAccount(readBalance(accountName), subAmmount);
+
+            writeToAccount(accountName, addition);
         }
         else if (user_choice == 5)
         {
