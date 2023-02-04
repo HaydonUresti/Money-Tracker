@@ -38,6 +38,9 @@ void createMainFolder()
     _chdir(pathToProgram);
 }
 
+// A function that deletes a deleted account within accountFile.txt
+// Parameters: string toDelete - the account to be deleted
+// Returns: None
 void reWriteToAccountFile(string toDelete)
 {
     ofstream accountFile;
@@ -56,6 +59,9 @@ void reWriteToAccountFile(string toDelete)
     accountFile.close();
 }
 
+// A function that deletes an account selected by the user within the function
+// Parameters: None
+// Return: None
 void deleteAccount()
 {
     string dirName = "./accountDir/";
@@ -80,7 +86,8 @@ void deleteAccount()
 }
 
 // A function that reads from a selected file
-//
+// Parameters: char *accountName - the path to the account to be read
+// Returns: None
 string readBalance(char *accountName)
 {
     // readFromFile(accountName);
@@ -110,6 +117,10 @@ string readBalance(char *accountName)
     _chdir(pathToProgram);
 }
 
+// A funtion that adds a given ammount to the saved ammmount in the account
+// Parameters: string readBalance - the current balance saved in the account
+//             double addend - the ammount to be added to the account
+// Returns: The new balance after addition
 double getAdditionToAccount(string readBalance, double addend)
 {
     double balance = stod(readBalance);
@@ -117,6 +128,10 @@ double getAdditionToAccount(string readBalance, double addend)
     return balance + addend;
 }
 
+// A funtion that subtracts a given ammount from the saved ammmount in the account
+// Parameters: string readBalance - the current balance saved in the account
+//             double subtrahend - the ammount to be taken from the account
+// Returns: The new balance after subtraction
 double getSubtractionToAccount(string readBalance, double subtrahend)
 {
     double balance = stod(readBalance);
