@@ -4,13 +4,12 @@ using namespace std;
 #include <direct.h>
 #include <fstream>
 #include <stdio.h>
-#include <windows.h>
 #include <tchar.h>
-#include <map>
 #include <sstream>
 #include <iomanip>
 #include <vector>
 #include <cmath>
+#include "accountVector.h"
 using std::vector;
 
 // -----------------------IMPORTANT!!!-----------------------
@@ -18,30 +17,6 @@ using std::vector;
 const char *pathToProgram = "C:/Users/hdure/OneDrive/Documents/School/Winter_2023/Applied_Programming/Sprint2/Money-Tracker";
 // Enter the same path below that you entered above, but add /accountDir to the end
 const char *pathToAccountDir = "C:/Users/hdure/OneDrive/Documents/School/Winter_2023/Applied_Programming/Sprint2/Money-Tracker/accountDir";
-
-// TCHAR MSpathToAccount = "C:/Users/hdure/OneDrive/Documents/School/Winter_2023/Applied_Programming/Sprint2/Money-Tracker/accountDir";
-
-// const string pathToAccountDir = "C:/Users/hdure/OneDrive/Documents/School/Winter_2023/Applied_Programming/Sprint2/Money-Tracker/accountDir";
-// For the class aspect, have the abject be the file the user chooses
-
-// class Account
-// {
-// public:
-//     string accountName;
-//     int ballance;
-
-//     Account(string name, int currentBallance)
-//     {
-//         accountName = name;
-//         ballance = currentBallance;
-//     }
-
-//     void displayInfo()
-//     {
-//         cout << "Account Name: " << accountName << endl;
-//         cout << "Balance: " << accountName << endl;
-//     }
-// };
 
 // A function that creates the directory accountsDir if it does not exist
 // Parameters: None
@@ -61,6 +36,24 @@ void createMainFolder()
     _chdir(pathToAccountDir);
     ofstream accountFile("accountFile.txt");
     _chdir(pathToProgram);
+}
+
+void reWriteToAccountFile(string toDelete)
+{
+    ofstream accountFile;
+    AccountVector curVector;
+    accountFile.open("./accountDir/accountFile.txt", std::ofstream::out | std::ofstream::trunc);
+    for (auto curLine : curVector.printVector())
+    {
+        if (curLine != toDelete)
+        {
+
+            accountFile << curLine << endl;
+        }
+        // accountFile << "Something is happening <<<<";
+    }
+    // accountFile << ">>>Something happening 2";
+    accountFile.close();
 }
 
 void deleteAccount()
@@ -83,6 +76,7 @@ void deleteAccount()
 
     // Change the working directory back to the previous directory
     _chdir(pathToProgram);
+    reWriteToAccountFile(accountName);
 }
 
 // A function that reads from a selected file
@@ -109,10 +103,6 @@ string readBalance(char *accountName)
             curBalance = line.substr(npos + 1);
 
             return curBalance;
-            // if (counter == 4)
-            // {
-            //     return curBalance;
-            // }
         }
 
         file.close();
@@ -188,25 +178,6 @@ void creatNewAccount()
     foutput.close();
 }
 
-std::vector<std::string> getAccountVector()
-{
-    string nameOfFile;
-    ifstream file;
-
-    file.open("./accountDir/accountFile.txt");
-    vector<string> availableAccounts;
-    string line;
-
-    while (!file.eof())
-    {
-        getline(file, line);
-        availableAccounts.push_back(line);
-    }
-    file.close();
-
-    return availableAccounts;
-}
-
 int main()
 {
     createMainFolder();
@@ -236,14 +207,12 @@ int main()
         if (user_choice == 1)
         {
 
-            cout << "Choice is 1\n"
-                 << endl;
-
             creatNewAccount();
         }
         else if (user_choice == 2)
         {
-            for (auto curLine : getAccountVector())
+            AccountVector curVector;
+            for (auto curLine : curVector.printVector())
             {
                 cout << curLine << endl;
             }
@@ -263,6 +232,11 @@ int main()
 
         else if (user_choice == 3)
         {
+            AccountVector curVector;
+            for (auto curLine : curVector.printVector())
+            {
+                cout << curLine << endl;
+            }
             char accountName[20];
             double ammount;
             cout << "Choice is 3\n"
@@ -280,6 +254,11 @@ int main()
         }
         else if (user_choice == 4)
         {
+            AccountVector curVector;
+            for (auto curLine : curVector.printVector())
+            {
+                cout << curLine << endl;
+            }
             char accountName[20];
             double subAmmount;
             cout << "Choice is 3\n"
@@ -297,6 +276,11 @@ int main()
         }
         else if (user_choice == 5)
         {
+            AccountVector curVector;
+            for (auto curLine : curVector.printVector())
+            {
+                cout << curLine << endl;
+            }
             deleteAccount();
         }
         else if (user_choice == 6)
