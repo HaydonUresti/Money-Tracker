@@ -6,6 +6,7 @@ using namespace std;
 #include <vector>
 using std::vector;
 
+// A class that creats and returns a vector of available accounts.
 class AccountVector
 {
 public:
@@ -38,12 +39,4 @@ public:
     {
         return availableAccounts;
     }
-
-    // std::vector<std::string> deleteFromVector(string val)
-    // {
-
-    //     vector<string>::iterator newVector;
-    //     newVector = remove(availableAccounts.begin(), availableAccounts.end(), val);
-    //     return newVector;
-    // }
 };

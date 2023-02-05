@@ -14,9 +14,11 @@ using std::vector;
 
 // -----------------------IMPORTANT!!!-----------------------
 // In the line below, enter the path to the directory where money_tracker.exe is stored
-const char *pathToProgram = "C:/Users/hdure/OneDrive/Documents/School/Winter_2023/Applied_Programming/Sprint2/Money-Tracker";
+const char *pathToProgram = ;
+
 // Enter the same path below that you entered above, but add /accountDir to the end
-const char *pathToAccountDir = "C:/Users/hdure/OneDrive/Documents/School/Winter_2023/Applied_Programming/Sprint2/Money-Tracker/accountDir";
+
+const char *pathToAccountDir = "/accountDir";
 
 // A function that creates the directory accountsDir if it does not exist
 // Parameters: None
@@ -53,9 +55,7 @@ void reWriteToAccountFile(string toDelete)
 
             accountFile << curLine << endl;
         }
-        // accountFile << "Something is happening <<<<";
     }
-    // accountFile << ">>>Something happening 2";
     accountFile.close();
 }
 
@@ -90,25 +90,22 @@ void deleteAccount()
 // Returns: None
 string readBalance(char *accountName)
 {
-    // readFromFile(accountName);
+    // Change directory to the one containing the accountDir
     _chdir(pathToAccountDir);
-    std::ifstream file(accountName);
 
+    // open the chosen account
+    std::ifstream file(accountName);
     if (file.is_open())
     {
         std::string line;
 
         string curBalance;
 
-        int counter = 1;
-
+        // Read from the account file
         while (std::getline(file, line))
         {
-            counter += 1;
-
             auto npos = line.find(":");
             curBalance = line.substr(npos + 1);
-
             return curBalance;
         }
 
@@ -117,9 +114,9 @@ string readBalance(char *accountName)
     _chdir(pathToProgram);
 }
 
-// A funtion that adds a given ammount to the saved ammmount in the account
+// A funtion that adds a given amount to the saved ammmount in the account
 // Parameters: string readBalance - the current balance saved in the account
-//             double addend - the ammount to be added to the account
+//             double addend - the amount to be added to the account
 // Returns: The new balance after addition
 double getAdditionToAccount(string readBalance, double addend)
 {
@@ -128,9 +125,9 @@ double getAdditionToAccount(string readBalance, double addend)
     return balance + addend;
 }
 
-// A funtion that subtracts a given ammount from the saved ammmount in the account
+// A funtion that subtracts a given amount from the saved ammmount in the account
 // Parameters: string readBalance - the current balance saved in the account
-//             double subtrahend - the ammount to be taken from the account
+//             double subtrahend - the amount to be taken from the account
 // Returns: The new balance after subtraction
 double getSubtractionToAccount(string readBalance, double subtrahend)
 {
@@ -193,8 +190,10 @@ void creatNewAccount()
     foutput.close();
 }
 
+// Main function of the program
 int main()
 {
+    // Create the accountDir folder if it does not exist
     createMainFolder();
 
     cout
@@ -203,6 +202,7 @@ int main()
     bool run = true;
     int user_choice = 0;
 
+    // The main loop
     while (run != false)
     {
         cout << "\n ------------------ " << endl;
@@ -221,7 +221,6 @@ int main()
 
         if (user_choice == 1)
         {
-
             creatNewAccount();
         }
         else if (user_choice == 2)
@@ -247,64 +246,70 @@ int main()
 
         else if (user_choice == 3)
         {
+            // Create a vector containing the current accounts, then dsiplay them
             AccountVector curVector;
             for (auto curLine : curVector.printVector())
             {
                 cout << curLine << endl;
             }
+
             char accountName[20];
-            double ammount;
-            cout << "Choice is 3\n"
-                 << endl;
-            cout << "Which account would you like to take from? (Please be sure to enter '.txt' to the end of the name)\n"
+            double amount;
+
+            cout << "Which account would you like to add to? (Please be sure to enter '.txt' to the end of the name)\n"
                  << endl;
             cin >> accountName;
             cout << "There is currently $" << readBalance(accountName) << " in your " << accountName
-                 << " account. How much would you like to subtract? \n (Enter the ammount with TWO decimal points, Ex 1.00) \n"
+                 << " account. How much would you like to add? \n (Enter the amount with TWO decimal points, Ex 1.00) \n"
                  << endl;
-            cin >> ammount;
-            double addition = getAdditionToAccount(readBalance(accountName), ammount);
+            cin >> amount;
+            double addition = getAdditionToAccount(readBalance(accountName), amount);
 
             writeToAccount(accountName, addition);
         }
         else if (user_choice == 4)
         {
+            // Create a vector containing the current accounts, then dsiplay them
             AccountVector curVector;
             for (auto curLine : curVector.printVector())
             {
                 cout << curLine << endl;
             }
+
             char accountName[20];
-            double subAmmount;
-            cout << "Choice is 3\n"
-                 << endl;
-            cout << "Which account would you like to add to? (Please be sure to enter '.txt' to the end of the name)\n"
+            double subamount;
+
+            cout << "Which account would you like to withdraw from? (Please be sure to enter '.txt' to the end of the name)\n"
                  << endl;
             cin >> accountName;
             cout << "There is currently $" << readBalance(accountName) << " in your " << accountName
-                 << " account. How much would you like to add? \n (Enter the ammount with TWO decimal points, Ex 1.00) \n"
+                 << " account. How much would you like to withdraw? \n (Enter the amount with TWO decimal points, Ex 1.00) \n"
                  << endl;
-            cin >> subAmmount;
-            double addition = getSubtractionToAccount(readBalance(accountName), subAmmount);
+            cin >> subamount;
+            double subtraction = getSubtractionToAccount(readBalance(accountName), subamount);
 
-            writeToAccount(accountName, addition);
+            writeToAccount(accountName, subtraction);
         }
         else if (user_choice == 5)
         {
+            // Create a vector containing the current accounts, then dsiplay them
             AccountVector curVector;
             for (auto curLine : curVector.printVector())
             {
                 cout << curLine << endl;
             }
+
             deleteAccount();
         }
         else if (user_choice == 6)
         {
+            // exit the program
             cout << "Thank you for using Money Tracker!";
             run = false;
         }
         else
         {
+            // Handle invalid input to the main menu
             cout << "Please enter a valid option. \n"
                  << endl;
 
@@ -315,6 +320,3 @@ int main()
         system("pause>0");
     }
 }
-
-// Lets not immedietely worry about haveing account history
-// just account ballance
