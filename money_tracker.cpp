@@ -71,7 +71,8 @@ void deleteAccount()
          << endl;
     cin >> accountName;
 
-    // Change the current working directory to the one containing all the account files
+    // Change the current working directory to the one containing all the account files. This is done so the program can access the files it creates. 
+    // The user must have updated the value of the pathToProgram variable 
     _chdir(pathToAccountDir);
 
     // Delete the chosen account
